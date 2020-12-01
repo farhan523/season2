@@ -1,0 +1,27 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Deploying to surge
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 12
+      - name: Github action for yarn
+        uses: Borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+      - name: install surge
+        run: npm install -g surge
+      - name: Deploying on surge
+        run: surge ./build http://counter_app001.surge.sh/ --token ${{secrets.SURGE_TOKEN}}
